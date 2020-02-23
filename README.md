@@ -1,8 +1,11 @@
 # Spring Batch 샘플 프로젝트 생성
 jojoldu님의 Spring Batch 가이드를 따라 치는중입니다.  
 - https://jojoldu.tistory.com/326?category=635883
+- '2. Batch Job 실행해보기, 3. 메타테이블 엿보기' 진행중
+
 
 ## mysql 연결 후 실행
+  
 application.yml을 작성한 후  
 schema-mysql.sql파일의 쿼리문으로 mysql에 메타테이블을 생성했습니다.
 
