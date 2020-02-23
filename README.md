@@ -1,4 +1,6 @@
-# second commit 필기
+# Spring Batch 샘플 프로젝트 생성
+jojoldu님의 Spring Batch 가이드를 따라 치는중입니다.  
+- https://jojoldu.tistory.com/326?category=635883
 
 ## mysql 연결 후 실행
 application.yml을 작성한 후  
