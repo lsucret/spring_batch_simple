@@ -23,6 +23,7 @@ public class SimpleJobConfiguration {
     public Job simpleJob() {
         return jobBuilderFactory.get("simpleJob") // Job 안에 Step 안에 Tasklet or Reader&Processor&Writer 묶음이 존재
                 .start(simpleStep1(null))
+                .next(simpleStep2(null))
                 .build();
     }
 
@@ -31,7 +32,19 @@ public class SimpleJobConfiguration {
     public Step simpleStep1(@Value("#{jobParameters[requestDate]}") String requestDate) {
         return stepBuilderFactory.get("simpleStep1") // Batch Step 이름을 생성 : simpleStep1
                 .tasklet((contribution, chunkContext) -> {  // Step 안에서 수행될 기능들을 명시. Step 안에서 단일로 수행될 커스텀한 기능들을 선언
-                    log.info(">>>>> This is Step1");        // Batch가 수행되면 이 로그가 출력됩니다.
+                    log.info(">>>>> This is Step2");
+                    log.info(">>>>> requestDate = {}", requestDate);
+                    return RepeatStatus.FINISHED;
+                })
+                .build();
+    }
+
+    @Bean
+    @JobScope
+    public Step simpleStep2(@Value("#{jobParameters[requestDate]}") String requestDate) {
+        return stepBuilderFactory.get("simpleStep2")
+                .tasklet((contribution, chunkContext) -> {
+                    log.info(">>>>> This is Step2");
                     log.info(">>>>> requestDate = {}", requestDate);
                     return RepeatStatus.FINISHED;
                 })
