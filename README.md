@@ -58,3 +58,45 @@ schema-mysql.sql파일의 쿼리문으로 mysql에 메타테이블을 생성했�
   (Job Instance Context 문제를 겪는다 함.)
   후반엔 H2를 이용한 테스트 코드를 작성할 것.
   
+  
+
+### Next
+step을 순차적으로 연결시킬 때 사용된다.
+
+원하는 Job만 실행시키려면
+1. application.yml에 내용 추가
+    ```
+    spring.batch.job.names: ${job.name:NONE}
+    ```
+    - job.name이 있으면 그걸 할당하고, 없으면 NONE을 할당한다는 뜻
+    - NONE이 할당되면 어떤 배치도 실행하지 않겠다는 의미(배치 실행을 막는 역할)
+
+2. program argument에 아래 내용 추가
+    ```    
+    --job.name=stepNextJob version=2
+    ``` 
+
+* 실제 운영 환경에서는 java -jar batch-application.jar --job.name=simpleJob 과 같이 배치를 실행합니다.
+
+### 조건별 흐름 제어(Flow)
+- next는 앞의 step에서 오류가 나면 나머지 뒤에 있는 step 들은 실행되지 못한다.
+- 상황에 따라 오류/정상에 따라 행동분기를 나누고 싶을 때 사용한다.
+
+1. on()
+    - 캐치할 ExitStatus 지정
+    - * 일 경우 모든 ExitStatus가 지정
+2. to()
+    - 다음으로 이동할 Step 지정
+3. from()
+    - 일종의 이벤트 리스너 역할
+    - 상태값을 보고 일치하는 상태라면 to()에 포함된 `step`을 호출
+    - step1의 이벤트 캐치가 FAILED로 되있는 상태에서 추가로 이벤트 캐치하려면 from을 써야 함
+4. end()
+    - end는 FlowBuilder를 반환하는 end와 FlowBuilder를 종료하는 end 2개가 있음
+    - on("*")뒤에 있는 end는 FlowBuilder를 반환하는 end
+    - build() 앞에 있는 end는 FlowBuilder를 종료하는 end
+    - FlowBuilder를 반환하는 end 사용시 계속해서 from을 이어갈 수 있음
+    
+- on이 캐치하는 상태값은 BatchStatus가 아닌 ExitStatus라는 점!!
+- 분기 처리를 위해 상태값 조정이 필요하다면 ExitStatus를 조정해야 한다.
+
