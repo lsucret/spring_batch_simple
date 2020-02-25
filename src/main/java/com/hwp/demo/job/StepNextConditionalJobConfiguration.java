@@ -42,11 +42,12 @@ public class StepNextConditionalJobConfiguration {
         return stepBuilderFactory.get("step1")
                 .tasklet((contribution, chunkContext) -> {
                     log.info(">>>>> This is stepNextConditionalJob Step1");
+
                     /**
-                     * ExitStatus를 FAILED로 지정한다.
-                     * 해당 statusㄹㄹ 보고 flow가 진행된다.
-                     * **/
-                    contribution.setExitStatus(ExitStatus.FAILED);
+                     ExitStatus를 FAILED로 지정한다.
+                     해당 status를 보고 flow가 진행된다.
+                     **/
+//                    contribution.setExitStatus(ExitStatus.FAILED);
 
                     return RepeatStatus.FINISHED;
                 })
@@ -55,7 +56,7 @@ public class StepNextConditionalJobConfiguration {
 
     @Bean
     public Step conditionalJobStep2() {
-        return stepBuilderFactory.get("step2")
+        return stepBuilderFactory.get("conditionalJobStep2")
                 .tasklet((contribution, chunkContext) -> {
                     log.info(">>>>> This is stepNextConditionalJob Step2");
                     return RepeatStatus.FINISHED;
@@ -65,7 +66,7 @@ public class StepNextConditionalJobConfiguration {
 
     @Bean
     public Step conditionalJobStep3() {
-        return stepBuilderFactory.get("step3")
+        return stepBuilderFactory.get("conditionalJobStep3")
                 .tasklet((contribution, chunkContext) -> {
                     log.info(">>>>> This is stepNextConditionalJob Step3");
                     return RepeatStatus.FINISHED;

@@ -100,3 +100,5 @@ step을 순차적으로 연결시킬 때 사용된다.
 - on이 캐치하는 상태값은 BatchStatus가 아닌 ExitStatus라는 점!!
 - 분기 처리를 위해 상태값 조정이 필요하다면 ExitStatus를 조정해야 한다.
 
+
+### 번외 2. Batch Status vs. Exit Status
