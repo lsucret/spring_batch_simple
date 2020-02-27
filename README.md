@@ -97,7 +97,7 @@ step을 순차적으로 연결시킬 때 사용된다.
     - build() 앞에 있는 end는 FlowBuilder를 종료하는 end
     - FlowBuilder를 반환하는 end 사용시 계속해서 from을 이어갈 수 있음
     
-- on이 캐치하는 상태값은 BatchStatus가 아닌 ExitStatus라는 점!!
+- on이 캐치하는 상태값은 BatchStatus가 아닌 ExitStatus라는 점
 - 분기 처리를 위해 상태값 조정이 필요하다면 ExitStatus를 조정해야 한다.
 
 
