@@ -63,7 +63,7 @@ schema-mysql.sql파일의 쿼리문으로 mysql에 메타테이블을 생성했�
 ### Next
 step을 순차적으로 연결시킬 때 사용된다.
 
-원하는 Job만 실행시키려면
+#### 원하는 Job만 실행시키려면
 1. application.yml에 내용 추가
     ```
     spring.batch.job.names: ${job.name:NONE}
@@ -102,3 +102,46 @@ step을 순차적으로 연결시킬 때 사용된다.
 
 
 ### 번외 2. Batch Status vs. Exit Status
+- Batch Status는 Job 또는 Step의 실행 결과를 Spring에서 기록할 때 사용하는 Enum
+    - 사용되는 값 : COMPLETED, STARTING, STOPPING, STOPPED, FAILED, ABANDONED, UNKNOWN
+    ```
+    .on("FAILED").to(stepB())
+    ```
+    - 위 FAILED는 BatchStatus가 아니라 Step의 ExitStatus이다.
+    - exitCode가 FAILED로 끝나게 되면 Step B로 가라는 뜻.
+    
+- Spring Batch는 기본적으로 ExitStatus의 exitCode는 Step의 BatchStatus와 같도록 설정이 되어있다.
+- 커스컴한 exitCode가 필요하다면?
+```
+.start(step1())
+    .on("FAILED")
+    .end()
+.from(step1())
+    .on("COMPLETED WITH SKIPS")
+    .to(errorPrint1())
+    .end()
+.from(step1())
+    .on("*")
+    .to(step2())
+    .end()
+```
+- `COMPLETED WITH SKIPS`는 ExitStatus에 없는 코드
+- 해당 exitCode를 반환하는 별도의 로직이 필요하다.
+```
+public class SkipCheckingListener extends StepExecutionListenerSupport {
+
+    public ExitStatus afterStep(StepExecution stepExecution) {
+        String exitCode = stepExecution.getExitStatus().getExitCode();
+        if (!exitCode.equals(ExitStatus.FAILED.getExitCode()) && 
+              stepExecution.getSkipCount() > 0) {
+            return new ExitStatus("COMPLETED WITH SKIPS");
+        }
+        else {
+            return null;
+        }
+    }
+}```
+- 먼저 Step이 성공적으로 수행되었는지 확인한 후,
+- StepExecution의 skip 횟수가 0보다 클 경우 위 exitCode를 갖는 ExitStatus를 반환
+
+### Decide
