@@ -35,7 +35,7 @@ public class StepNextJobConfiguration {
                     return RepeatStatus.FINISHED;
                 })
                 .build();
-    }//1
+    }
 
     @Bean
     public Step step2() {
