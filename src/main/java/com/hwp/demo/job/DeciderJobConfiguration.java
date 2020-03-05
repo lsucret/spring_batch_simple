@@ -27,14 +27,14 @@ public class DeciderJobConfiguration {
     public Job deciderJob() {
         return jobBuilderFactory.get("deciderJob")
                 .start(startStep())
-                .next(decider())
-                .from(decider())
-                    .on("ODD")
-                    .to(oddStep())
-                .from(decider())
-                    .on("EVEN")
-                    .to(evenStep())
-                .end()
+                .next(decider()) // 홀수 | 짝수 구분
+                .from(decider()) // decider의 상태가
+                    .on("ODD") // ODD라면
+                    .to(oddStep()) // oddStep으로 간다.
+                .from(decider()) // decider의 상태가
+                    .on("EVEN") // EVEN이라면
+                    .to(evenStep()) // evenStep으로 간다.
+                .end() // builder 종료
                 .build();
     }
 
@@ -89,4 +89,5 @@ public class DeciderJobConfiguration {
             }
         }
     }
+
 }

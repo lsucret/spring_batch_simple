@@ -140,8 +140,25 @@ public class SkipCheckingListener extends StepExecutionListenerSupport {
             return null;
         }
     }
-}```
+}
+```
+
 - 먼저 Step이 성공적으로 수행되었는지 확인한 후,
 - StepExecution의 skip 횟수가 0보다 클 경우 위 exitCode를 갖는 ExitStatus를 반환
 
 ### Decide
+분기처리만을 담당
+
+위에서 알아본 방식은 문제가 2개 존재
+- Step이 담당하는 역할이 2가지
+- 다양한 분기 로직 처리에 어려움
+    - ExitStatus를 커스텀하게 고치기 위해서 Listener 생성하고 JobFlow에 등록하는 등 복잡
+
+- `JobExecutionDecider`
+
+
+- 예제코드 : DeciderJobConfiguration
+- Step과 명확히 역할과 책임이 분리되어있음.
+- ExitStatus가 아닌 FlowExecutionStatus로 상태를 관리.
+- 그걸 `.from().on()` 에서 사용
+
