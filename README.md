@@ -1,5 +1,5 @@
 # Spring Batch 샘플 프로젝트 생성
-jojoldu님의 Spring Batch 가이드를 따라 치는중입니다.  
+jojoldu님의 Spring Batch 가이드를 따라 치는중입니다.
 - https://jojoldu.tistory.com/326?category=635883
 
 
