@@ -1,7 +1,6 @@
 # Spring Batch 샘플 프로젝트 생성
 jojoldu님의 Spring Batch 가이드를 따라 치는중입니다.  
 - https://jojoldu.tistory.com/326?category=635883
-- '2. Batch Job 실행해보기, 3. 메타테이블 엿보기' 진행중
 
 
 ## mysql 연결 후 실행
@@ -162,3 +161,79 @@ public class SkipCheckingListener extends StepExecutionListenerSupport {
 - ExitStatus가 아닌 FlowExecutionStatus로 상태를 관리.
 - 그걸 `.from().on()` 에서 사용
 
+
+
+# JobScope, StepScope
+
+Spring Batch Scope & Job Parameter
+
+@StepScope, @JobScope
+
+스프링 배치는 내,외부에서 파라미터를 받아 여러 Batch 컴포넌트에서 사용할 수 있게 지원해주는데, 
+
+이 파라미터를 Job Parameter라고 하며, 
+
+Spring Batch 전용 어노테이션을 선언해야 사용 가능합니다.
+
+이 때 쓰이는 것이 위의 두 어노테이션입니다.
+
+사용법은 SpEL로 선언합니다.
+
+    @Value("#{jobParameters[파라미터명]}")
+
+```
+@Bean
+public Job scopeJob() {
+        return jobBuilderFactory.get("scopeJob")
+                .start(scopeStep1(null))
+                .next(scopeStep2())
+                .build();
+}
+
+@Bean
+@JobScope
+public Step scopeStep1(@Value("#{jobParameters[requestDate]}") String requestDate) {
+        return stepBiulderFactory.get("scopeStep1")
+                .tasklet((contribution, chunkContext) -> {
+                        log.info(">>>>> This is scopeStep1");
+                        log.info(">>>>> requestDate = {}", requestDate);
+                        return RepeatStatus.FINISHED;
+                })
+                .build();
+}
+```
+
+```
+@Bean
+public Step scopeStep2() {
+        return stepBuilderFactory.get("scopeStep2")
+                .tasklet(scopeStep2Tasklet(null)) 
+// null인 이유는 JobParameter의 할당이 어플리케이션 실행시에 이뤄지지 않기 때문
+                .build();
+}
+
+@Bean
+@StepScope
+public Tasklet scopeStep2Tasklet(@Value("#{jobParameters[requestDate]}") String requestDate {
+        return (contribution, chunkContext) -> {
+                log.info(">>>>> This is scopeStep2");
+                log.info(">>>>> requestDate = {}", requestDate);
+                return RepeatStatus.FINISHED;
+        };
+}
+```
+
+두 어노테이션이 사용 가능한 상황이 다르다.
+
+- @JobScope : Step 선언문
+- @StepScope : Tasklet, ItemReader, ItemWriter, ItemProcessor
+
+JobParameter의 타입
+
+- Double, Long
+- Date
+- String
+- ~~LocalDate, LocalTime~~ 대신 String으로 받아 타입 변환 필요
+
+
+https://jojoldu.tistory.com/330?category=902551 진행중..
