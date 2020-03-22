@@ -235,5 +235,6 @@ JobParameter의 타입
 - String
 - ~~LocalDate, LocalTime~~ 대신 String으로 받아 타입 변환 필요
 
+JobScope > StepScope
 
 https://jojoldu.tistory.com/330?category=902551 진행중..
