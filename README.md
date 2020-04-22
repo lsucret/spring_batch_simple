@@ -83,7 +83,7 @@ step을 순차적으로 연결시킬 때 사용된다.
 
 1. on()
     - 캐치할 ExitStatus 지정
-    - * 일 경우 모든 ExitStatus가 지정
+    - `*` 일 경우 모든 ExitStatus가 지정
 2. to()
     - 다음으로 이동할 Step 지정
 3. from()
@@ -235,6 +235,8 @@ JobParameter의 타입
 - String
 - ~~LocalDate, LocalTime~~ 대신 String으로 받아 타입 변환 필요
 
-JobScope > StepScope
 
-https://jojoldu.tistory.com/330?category=902551 진행중..
+# Job Parameter 오해
+Job Parameters 는 @Value를 통해 사용 가능  
+이 Job Parameter는 Bean 생성 시점에 호출되는 것처럼 보이지만,  
+정확히는 **Scope Bean을 생성**해야 사용 가능하다.
