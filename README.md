@@ -240,3 +240,7 @@ JobParameter의 타입
 Job Parameters 는 @Value를 통해 사용 가능  
 이 Job Parameter는 Bean 생성 시점에 호출되는 것처럼 보이지만,  
 정확히는 **Scope Bean을 생성**해야 사용 가능하다.
+
+-- 와... VM Options에 --job.name=stepNextJob 백날 적으니까   
+JVM이 오류가 나서 일주일간 이 프로젝트를 살리질 못했다 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ
+
