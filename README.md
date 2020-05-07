@@ -191,7 +191,7 @@ public Job scopeJob() {
 }
 
 @Bean
-@JobScope
+@JobScope // Step 선언문에서 사용 가능
 public Step scopeStep1(@Value("#{jobParameters[requestDate]}") String requestDate) {
         return stepBiulderFactory.get("scopeStep1")
                 .tasklet((contribution, chunkContext) -> {
@@ -213,7 +213,7 @@ public Step scopeStep2() {
 }
 
 @Bean
-@StepScope
+@StepScope // Tasklet, ItemReader, ItemWriter, ItemProcessor에서 사용 가능
 public Tasklet scopeStep2Tasklet(@Value("#{jobParameters[requestDate]}") String requestDate {
         return (contribution, chunkContext) -> {
                 log.info(">>>>> This is scopeStep2");
@@ -237,9 +237,9 @@ JobParameter의 타입
 
 
 # Job Parameter 오해
-Job Parameters 는 @Value를 통해 사용 가능  
-이 Job Parameter는 Bean 생성 시점에 호출되는 것처럼 보이지만,  
-정확히는 **Scope Bean을 생성**해야 사용 가능하다.
+Job Parameters 는 @Value를 통해 사용 가능한데  
+Job Parameter는 `@Bean` 생성 시점에 호출 가능하나, 조건으로  
+단, `@Scope Bean`이 생성되어야만 사용 가능하다.
 
 -- 와... VM Options에 --job.name=stepNextJob 백날 적으니까   
 JVM이 오류가 나서 일주일간 이 프로젝트를 살리질 못했다 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ
