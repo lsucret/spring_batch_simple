@@ -245,11 +245,3 @@ Job Parameter는 `@Bean` 생성 시점에 호출 가능하나, 조건으로
 JVM이 오류가 나서 일주일간 이 프로젝트를 살리질 못했다 ㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 
 
-
-
-  + __test__
-    ```
-    # test
-    INSERT INTO test FROM DAUL;  
-    INSERT INTO test FROM DAUL;  
-    ``` 
