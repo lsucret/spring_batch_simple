@@ -1,6 +1,6 @@
 spring:
   profiles:
-    actice: local
+    active: mysql
 
 spring.batch.job.names: ${job.name:NONE}
 ---
